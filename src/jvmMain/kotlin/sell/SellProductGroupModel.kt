@@ -1,3 +1,6 @@
 package sell
 
-class SellProductGroupModel(val groupName: String, val productCount: Int)
+import androidx.compose.runtime.Immutable
+
+@Immutable
+data class SellProductGroupModel(val groupName: String, val productCount: Int)

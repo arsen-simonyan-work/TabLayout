@@ -63,12 +63,14 @@ fun createMainUI(){
                     2 -> {
                         println("Tab3")
                         createUI()
-                        addToList(SellProductGroupModel("Sigaret", 20))
-//                        addToList(SellProductGroupModel("Katnamterq", 12))
-//                        addToList(SellProductGroupModel("Hacabulkexen", 5))
-//                        addToList(SellProductGroupModel("Alkohol", 156))
-//                        addToList(SellProductGroupModel("Katnamterq", 999))
-//                        addToList(SellProductGroupModel("Pahaco", 44))
+                        LaunchedEffect(selectedTabIndex) {
+                            addToList(SellProductGroupModel("Sigaret", 20))
+                            addToList(SellProductGroupModel("Katnamterq", 12))
+                            addToList(SellProductGroupModel("Hacabulkexen", 5))
+                            addToList(SellProductGroupModel("Alkohol", 156))
+                            addToList(SellProductGroupModel("Katnamterq", 999))
+                            addToList(SellProductGroupModel("Pahaco", 44))
+                        }
                     }
                 }
             }

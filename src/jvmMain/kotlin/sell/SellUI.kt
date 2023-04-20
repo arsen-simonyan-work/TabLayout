@@ -5,7 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,11 +35,11 @@ fun createUI(){
                 ) {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         productGroup.forEachIndexed { index, sellProductGroupModel ->
-                            //val state = rememberSaveable(index) { mutableStateOf(ItemState()) }
+                            val state = rememberSaveable(index) { mutableStateOf(ItemState()) }
                             item(index) {
                                 ProductGroupListItem(sellProductGroupModel,
                                     state = ItemState(),
-                                    onClick = {  },
+                                    onClick = { state.value.changeState() },
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .clickable {
@@ -98,10 +101,13 @@ private fun ProductGroupListItem(
                 modifier = Modifier.padding(3.dp).background(Color(255,0,0)),
                 text = group.groupName
             )
-            Text(
-                modifier = Modifier.padding(3.dp),
-                text = "${group.productCount}  >"
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    modifier = Modifier.padding(3.dp),
+                    text = "${group.productCount}"
+                )
+                Icon(Icons.Default.KeyboardArrowRight, "")
+            }
             if (state.expanded) {
                 Button(
                     onClick = onClick,
