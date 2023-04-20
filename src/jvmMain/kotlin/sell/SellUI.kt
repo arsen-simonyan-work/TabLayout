@@ -33,9 +33,10 @@ fun createUI(){
                     modifier = Modifier.fillMaxHeight().fillMaxWidth(0.3f)
                         .background(Color(255, 0, 0))
                 ) {
+                    val state = rememberSaveable { mutableStateOf(ItemState()) }
+
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         productGroup.forEachIndexed { index, sellProductGroupModel ->
-                            val state = rememberSaveable(index) { mutableStateOf(ItemState()) }
                             item(index) {
                                 ProductGroupListItem(sellProductGroupModel,
                                     state = ItemState(),
