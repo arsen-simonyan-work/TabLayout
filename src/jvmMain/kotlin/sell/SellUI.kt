@@ -4,15 +4,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 private var callback: ((SellProductGroupModel)-> Unit)? = null
 
@@ -30,25 +35,20 @@ fun createUI(){
         Row(modifier = Modifier.background(Color(0,95,0))) {
             Card(modifier = Modifier.padding(3.dp)) {
                 Box(
-                    modifier = Modifier.fillMaxHeight().fillMaxWidth(0.3f)
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth(0.3f)
                         .background(Color(255, 0, 0))
                 ) {
-                    val state = rememberSaveable { mutableStateOf(ItemState()) }
-
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        productGroup.forEachIndexed { index, sellProductGroupModel ->
-                            item(index) {
-                                ProductGroupListItem(sellProductGroupModel,
-                                    state = ItemState(),
-                                    onClick = { state.value.changeState() },
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .clickable {
-                                            //state.value.changeState()
-                                        }
-                                )
-                            }
+                    LazyColumn {
+                        itemsIndexed(productGroup){index, item->
+                            ProductGroupListItem(item)
                         }
+//                        productGroup.forEachIndexed { index, sellProductGroupModel ->
+//                            item(index) {
+//                                ProductGroupListItem(sellProductGroupModel)
+//                            }
+//                        }
                     }
                 }
             }
@@ -80,55 +80,41 @@ fun addToList(item: SellProductGroupModel){
     callback?.invoke(item)
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ProductGroupListItem(
-    group: SellProductGroupModel,
-    state: ItemState,
-    onClick: (() -> Unit) = {},
-    modifier: Modifier? = null
+    group: SellProductGroupModel
 ){
+    var expanded by remember { mutableStateOf(false) }
+
     Card(
-        modifier = Modifier.fillMaxWidth().padding(2.dp),
-        onClick = onClick
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(2.dp)
+            .clickable { expanded = !expanded },
     ) {
         Row (
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxSize()
-            .background(Color(92,92,92),
+            modifier = Modifier.fillMaxWidth()
+            .background(Color(156,156,156),
             )) {
             Text(
-                modifier = Modifier.padding(3.dp).background(Color(255,0,0)),
-                text = group.groupName
+                modifier = Modifier.padding(3.dp),
+                text = group.groupName,
+                color = Color.White,
+                fontSize = 24.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     modifier = Modifier.padding(3.dp),
                     text = "${group.productCount}"
                 )
-                Icon(Icons.Default.KeyboardArrowRight, "")
-            }
-            if (state.expanded) {
-                Button(
-                    onClick = onClick,
-                    modifier = Modifier.padding(8.dp)
-                ) {
-                    Text(text = "Click me")
-                }
+                if(expanded)
+                Icon(Icons.Default.KeyboardArrowDown, "")
+                else Icon(Icons.Default.KeyboardArrowRight, "")
             }
         }
-    }
-}
-
-class ItemState {
-
-    val expanded: Boolean
-        get() = _expanded.value
-
-    private val _expanded = mutableStateOf(false)
-
-    fun changeState() {
-        _expanded.value = !_expanded.value
     }
 }

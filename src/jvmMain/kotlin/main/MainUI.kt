@@ -1,5 +1,6 @@
 package main
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -66,7 +67,7 @@ fun createMainUI(){
                         LaunchedEffect(selectedTabIndex) {
                             addToList(SellProductGroupModel("Sigaret", 20))
                             addToList(SellProductGroupModel("Katnamterq", 12))
-                            addToList(SellProductGroupModel("Hacabulkexen", 5))
+                            addToList(SellProductGroupModel("Hacabulkexen Hacabulkexen", 5))
                             addToList(SellProductGroupModel("Alkohol", 156))
                             addToList(SellProductGroupModel("Katnamterq", 999))
                             addToList(SellProductGroupModel("Pahaco", 44))
