@@ -2,11 +2,12 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose")
+    id("org.jetbrains.kotlin.jvm") version "1.8.20" apply false
+    id("org.jetbrains.compose") version "1.5.0-dev1036"
 }
 
 group = "com.example"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     google()
@@ -22,7 +23,14 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
+                api(compose.runtime)
+                api(compose.foundation)
+                api(compose.material)
+
                 implementation(compose.desktop.currentOs)
+                //implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha08")
+                //implementation("io.coil-kt:coil-compose:2.3.0")
+                //implementation("androidx.compose.foundation:foundation-layout:1.1.0")
             }
         }
         val jvmTest by getting

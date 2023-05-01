@@ -34,25 +34,22 @@ fun createUI(){
     ) {
         Row(modifier = Modifier.background(Color(0,95,0))) {
             Card(modifier = Modifier.padding(3.dp)) {
-                Box(
+                LazyColumn(
                     modifier = Modifier
                         .fillMaxHeight()
                         .fillMaxWidth(0.3f)
                         .background(Color(255, 0, 0))
                 ) {
-                    LazyColumn {
-                        itemsIndexed(productGroup){index, item->
-                            ProductGroupListItem(item)
-                        }
-//                        productGroup.forEachIndexed { index, sellProductGroupModel ->
-//                            item(index) {
-//                                ProductGroupListItem(sellProductGroupModel)
-//                            }
-//                        }
+                    itemsIndexed(productGroup){_, item->
+                        ProductGroupListItem(item)
                     }
                 }
             }
             Box(Modifier.fillMaxHeight().fillMaxWidth(1.0f)) {
+//                AsyncImage(
+//                    model = "https://avatars.githubusercontent.com/u/52348172?s=400&u=b966d448e17f4fc8b2ef3fcbc18b395abe21e1c8&v=4",
+//                    contentDescription = "ddd"
+//                )
                 Column {
                     Card(modifier = Modifier.padding(3.dp)) {
                         Box(
