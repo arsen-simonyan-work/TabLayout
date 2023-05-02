@@ -31,6 +31,8 @@ kotlin {
                 //implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha08")
                 //implementation("io.coil-kt:coil-compose:2.3.0")
                 //implementation("androidx.compose.foundation:foundation-layout:1.1.0")
+                implementation("androidx.navigation:navigation-compose:2.5.3")
+                implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
             }
         }
         val jvmTest by getting

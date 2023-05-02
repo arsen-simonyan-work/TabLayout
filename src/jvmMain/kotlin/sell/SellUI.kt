@@ -18,16 +18,24 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import main.MyViewModel
 
-private var callback: ((SellProductGroupModel)-> Unit)? = null
+//private var callback: ((SellProductGroupModel)-> Unit)? = null
 
 @Composable
-fun createUI(){
+fun createUI(vm: MyViewModel){
 
-    var productGroup by remember { mutableStateOf(listOf<SellProductGroupModel>()) }
-    callback = { item->
-        productGroup = productGroup.toMutableList().also {  it.add(item) }.toList()
+    //val vm = remember { MyViewModel() }
+    //val favourites = remember { mutableStateListOf<SellProductGroupModel>()}
+
+//    callback = { item->
+//        vm.productGroup = vm.productGroup.toMutableList().also {  it.add(item) }.toList()
+//    }
+
+    vm.productGroup.forEach{
+        println(it)
     }
+    println("******************************************")
 
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -40,8 +48,12 @@ fun createUI(){
                         .fillMaxWidth(0.3f)
                         .background(Color(255, 0, 0))
                 ) {
-                    itemsIndexed(productGroup){_, item->
-                        ProductGroupListItem(item)
+                    itemsIndexed(vm.productGroup){_, item->
+                        ProductGroupListItem(item){
+                            vm.productGroup.forEach{
+                                println(it)
+                            }
+                        }
                     }
                 }
             }
@@ -73,21 +85,29 @@ fun createUI(){
     }
 }
 
-fun addToList(item: SellProductGroupModel){
-    callback?.invoke(item)
+//fun addToList(item: SellProductGroupModel){
+//    callback?.invoke(item)
+//}
+
+class SellViewModel{
+    var expanded by mutableStateOf(false)
 }
 
 @Composable
 private fun ProductGroupListItem(
-    group: SellProductGroupModel
+    group: SellProductGroupModel,
+    call: ()->Unit
 ){
-    var expanded by remember { mutableStateOf(false) }
-
+    //val vm = remember { SellViewModel() }
+    var expanded by mutableStateOf(group.isExpanded)
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(2.dp)
-            .clickable { expanded = !expanded },
+            .clickable { group.isExpanded = !group.isExpanded
+                       expanded = group.isExpanded
+                       call()
+                       },
     ) {
         Row (
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -109,7 +129,7 @@ private fun ProductGroupListItem(
                     text = "${group.productCount}"
                 )
                 if(expanded)
-                Icon(Icons.Default.KeyboardArrowDown, "")
+                    Icon(Icons.Default.KeyboardArrowDown, "")
                 else Icon(Icons.Default.KeyboardArrowRight, "")
             }
         }

@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.MenuBarScope
 import kotlinx.coroutines.*
 import sell.SellProductGroupModel
-import sell.addToList
+//import sell.addToList
 import sell.createUI
 
 @OptIn(ExperimentalFoundationApi::class, DelicateCoroutinesApi::class)
@@ -57,8 +57,27 @@ fun createMainUI(){
     }
 }
 
+class MyViewModel {
+    //var productGroup by mutableStateListOf<SellProductGroupModel>(null)
+    var productGroup: MutableList<SellProductGroupModel> by mutableStateOf(mutableListOf())
+
+    fun setList(list: MutableList<SellProductGroupModel>){
+        productGroup = list
+    }
+}
+
 @Composable
 fun content(selectedTabIndex: Int){
+
+    val vm = remember { MyViewModel() }
+    vm.setList(
+        mutableListOf(SellProductGroupModel("Sigaret", 20),
+            SellProductGroupModel("Katnamterq", 12),
+            SellProductGroupModel("Hacabulkexen Hacabulkexen", 5),
+            SellProductGroupModel("Alkohol", 156),
+            SellProductGroupModel("Katnamterq", 999),
+            SellProductGroupModel("Pahaco", 44)))
+
     Box(modifier = Modifier.fillMaxSize()) {
         when (selectedTabIndex) {
             0 ->
@@ -86,15 +105,17 @@ fun content(selectedTabIndex: Int){
             }
             2 -> {
                 println("Tab3")
-                createUI()
-                LaunchedEffect(selectedTabIndex) {
-                    addToList(SellProductGroupModel("Sigaret", 20))
-                    addToList(SellProductGroupModel("Katnamterq", 12))
-                    addToList(SellProductGroupModel("Hacabulkexen Hacabulkexen", 5))
-                    addToList(SellProductGroupModel("Alkohol", 156))
-                    addToList(SellProductGroupModel("Katnamterq", 999))
-                    addToList(SellProductGroupModel("Pahaco", 44))
-                }
+
+                createUI(vm)
+
+//                LaunchedEffect(selectedTabIndex) {
+//                    addToList(SellProductGroupModel("Sigaret", 20))
+//                    addToList(SellProductGroupModel("Katnamterq", 12))
+//                    addToList(SellProductGroupModel("Hacabulkexen Hacabulkexen", 5))
+//                    addToList(SellProductGroupModel("Alkohol", 156))
+//                    addToList(SellProductGroupModel("Katnamterq", 999))
+//                    addToList(SellProductGroupModel("Pahaco", 44))
+//                }
             }
         }
     }
