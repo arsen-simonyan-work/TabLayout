@@ -1,6 +1,13 @@
 package sell
 
-import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
-@Immutable
-data class SellProductGroupModel(val groupName: String, val productCount: Int, var isExpanded: Boolean = false)
+
+class SellProductGroupModel(
+    val groupName: String,
+    val productCount: Int,
+    ) {
+    var isExpanded by mutableStateOf(false)
+}

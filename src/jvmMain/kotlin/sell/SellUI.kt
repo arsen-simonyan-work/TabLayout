@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -24,12 +25,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import main.MyViewModel
-import javax.security.auth.kerberos.KerberosKey
 
 //private var callback: ((SellProductGroupModel)-> Unit)? = null
 
 @Composable
-fun createUI(vm: MyViewModel){
+fun CreateUI(vm: MyViewModel) {
 
     //val vm = remember { MyViewModel() }
     //val favourites = remember { mutableStateListOf<SellProductGroupModel>()}
@@ -38,7 +38,7 @@ fun createUI(vm: MyViewModel){
 //        vm.productGroup = vm.productGroup.toMutableList().also {  it.add(item) }.toList()
 //    }
 
-    vm.productGroup.forEach{
+    vm.tasks.forEach {
         println(it)
     }
     println("******************************************")
@@ -46,7 +46,7 @@ fun createUI(vm: MyViewModel){
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
-        Row(modifier = Modifier.background(Color(0,95,0))) {
+        Row(modifier = Modifier.background(Color(0, 95, 0))) {
             Card(modifier = Modifier.padding(3.dp)) {
                 LazyColumn(
                     modifier = Modifier
@@ -54,9 +54,15 @@ fun createUI(vm: MyViewModel){
                         .fillMaxWidth(0.3f)
                         .background(Color(255, 0, 0))
                 ) {
-                    itemsIndexed(vm.productGroup){_, item->
-                        ProductGroupListItem(item){
-                            vm.productGroup.forEach{
+                    itemsIndexed(vm.tasks) { _, item ->
+                        ProductGroupListItem(
+                            item,
+                            checked = item.isExpanded,
+                            onChecked = { task ->
+                                task.isExpanded = !task.isExpanded
+//                                vm.changeTaskChecked(task, checked)
+                            }) {
+                            vm.tasks.forEach {
                                 println(it)
                             }
                         }
@@ -95,32 +101,36 @@ fun createUI(vm: MyViewModel){
 //    callback?.invoke(item)
 //}
 
-class SellViewModel{
+class SellViewModel {
     var expanded by mutableStateOf(false)
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ProductGroupListItem(
     group: SellProductGroupModel,
-    call: ()->Unit
-){
+    checked: Boolean,
+    onChecked: (SellProductGroupModel) -> Unit,
+    call: () -> Unit
+) {
     //val vm = remember { SellViewModel() }
-    var expanded by rememberSaveable{ mutableStateOf(false)}
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(2.dp)
-            .clickable { group.isExpanded = !group.isExpanded
-                       expanded = group.isExpanded
-                       call()
-                       },
+            .padding(2.dp),
+        onClick = {
+            onChecked.invoke(group,)
+            call()
+        }
     ) {
-        Row (
+        Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
-            .background(Color(156,156,156),
-            )) {
+                .background(
+                    Color(156, 156, 156),
+                )
+        ) {
             Text(
                 modifier = Modifier.padding(3.dp).weight(1f),
                 text = group.groupName,
@@ -134,7 +144,7 @@ private fun ProductGroupListItem(
                     modifier = Modifier.padding(3.dp),
                     text = "${group.productCount}"
                 )
-                if(expanded)
+                if (checked)
                     Icon(Icons.Default.KeyboardArrowDown, "")
                 else Icon(Icons.Default.KeyboardArrowRight, "")
             }

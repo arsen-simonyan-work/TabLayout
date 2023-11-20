@@ -1,31 +1,27 @@
 package main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.MenuBarScope
 import kotlinx.coroutines.*
+import sell.CreateUI
 import sell.SellProductGroupModel
-//import sell.addToList
-import sell.createUI
 
 @OptIn(ExperimentalFoundationApi::class, DelicateCoroutinesApi::class)
 @Composable
-fun createMainUI(){
+fun createMainUI() {
     MaterialTheme {
 
-        val tabs by remember { mutableStateOf( listOf( "ՎԱՃԱՌՔ 1", "ՎԱՃԱՌՔ 2", "ՄՈՒՏՔԵՐ", "ՊԱՀԵՍՏ")) }
+        val tabs by remember { mutableStateOf(listOf("ՎԱՃԱՌՔ 1", "ՎԱՃԱՌՔ 2", "ՄՈՒՏՔԵՐ", "ՊԱՀԵՍՏ")) }
 
         var selectedTabIndex by remember { mutableStateOf(0) }
 
@@ -44,44 +40,38 @@ fun createMainUI(){
                 }
             }
 
-            HorizontalPager(
-                pageCount = tabs.size,
-                state = pagerState,
-                userScrollEnabled = true,
-                modifier = Modifier.weight(1f)
-                    .background(Color.Black)
-            ){
-                Content(selectedTabIndex)
-            }
+            Content(selectedTabIndex)
         }
     }
 }
 
 class MyViewModel {
-    //var productGroup by mutableStateListOf<SellProductGroupModel>(null)
-    var productGroup: MutableList<SellProductGroupModel> by mutableStateOf(mutableListOf())
+    private val _tasks = getWellnessTasks().toMutableStateList()
+    val tasks: List<SellProductGroupModel>
+        get() = _tasks
 
-    fun setList(list: MutableList<SellProductGroupModel>){
-        productGroup = list
-    }
+    fun changeTaskChecked(item: SellProductGroupModel, checked: Boolean) =
+        tasks.find { it.groupName == item.groupName }?.let { task ->
+            task.isExpanded = checked
+        }
+
+    private fun getWellnessTasks() = mutableListOf(
+        SellProductGroupModel("Sigaret", 20),
+        SellProductGroupModel("Katnamterq", 12),
+        SellProductGroupModel("Hacabulkexen Hacabulkexen", 5),
+        SellProductGroupModel("Alkohol", 156),
+        SellProductGroupModel("Katnamterq55", 999),
+        SellProductGroupModel("Pahaco", 44)
+    )
 }
 
 @Composable
-fun Content(selectedTabIndex: Int){
-
-    val vm = remember { MyViewModel() }
-    vm.setList(
-        mutableListOf(SellProductGroupModel("Sigaret", 20),
-            SellProductGroupModel("Katnamterq", 12),
-            SellProductGroupModel("Hacabulkexen Hacabulkexen", 5),
-            SellProductGroupModel("Alkohol", 156),
-            SellProductGroupModel("Katnamterq", 999),
-            SellProductGroupModel("Pahaco", 44)))
+fun Content(selectedTabIndex: Int) {
+    val viewModel = remember { MyViewModel() }
 
     Box(modifier = Modifier.fillMaxSize()) {
         when (selectedTabIndex) {
-            0 ->
-            {
+            0 -> {
                 Column {
                     Text("Content for Tab 1", modifier = Modifier.padding(16.dp))
                     Button(onClick = {
@@ -91,6 +81,7 @@ fun Content(selectedTabIndex: Int){
                     }
                 }
             }
+
             1 -> {
                 //addToList(SellProductGroupModel("Mirg", 77))
                 //addToList(SellProductGroupModel("Banjarexen", 88))
@@ -103,10 +94,11 @@ fun Content(selectedTabIndex: Int){
                     }
                 }
             }
+
             2 -> {
                 println("Tab3")
 
-                createUI(vm)
+                CreateUI(viewModel)
 
 //                LaunchedEffect(selectedTabIndex) {
 //                    addToList(SellProductGroupModel("Sigaret", 20))
