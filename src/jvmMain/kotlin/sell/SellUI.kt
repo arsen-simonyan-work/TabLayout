@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import main.MyViewModel
+import javax.security.auth.kerberos.KerberosKey
 
 //private var callback: ((SellProductGroupModel)-> Unit)? = null
 
@@ -103,7 +105,7 @@ private fun ProductGroupListItem(
     call: ()->Unit
 ){
     //val vm = remember { SellViewModel() }
-    var expanded by mutableStateOf(group.isExpanded)
+    var expanded by rememberSaveable{ mutableStateOf(false)}
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -138,4 +140,9 @@ private fun ProductGroupListItem(
             }
         }
     }
+}
+
+@Composable
+fun KerberosKey() {
+
 }

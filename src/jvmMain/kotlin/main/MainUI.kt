@@ -29,7 +29,7 @@ fun createMainUI(){
 
         var selectedTabIndex by remember { mutableStateOf(0) }
 
-        var pagerState = rememberPagerState(initialPage = tabs.size)
+        val pagerState = rememberPagerState(initialPage = tabs.size)
 
         Column {
             TabRow(selectedTabIndex) {
@@ -51,7 +51,7 @@ fun createMainUI(){
                 modifier = Modifier.weight(1f)
                     .background(Color.Black)
             ){
-                content(selectedTabIndex)
+                Content(selectedTabIndex)
             }
         }
     }
@@ -67,7 +67,7 @@ class MyViewModel {
 }
 
 @Composable
-fun content(selectedTabIndex: Int){
+fun Content(selectedTabIndex: Int){
 
     val vm = remember { MyViewModel() }
     vm.setList(
