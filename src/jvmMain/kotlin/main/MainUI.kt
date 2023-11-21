@@ -4,24 +4,37 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.MenuBarScope
-import kotlinx.coroutines.*
-import sell.CreateUI
-import sell.SellProductGroupModel
+import main.model.Screen
+import main.model.ScreenType
+import purchase.ui.CreatePurchaseUi
+import purchase.ui.PurchaseViewModel
+import sell.ui.CreateSellUi
+import sell.ui.SellViewModel
+import storage.ui.CreateStorageUi
+import storage.ui.StorageViewModel
 
-@OptIn(ExperimentalFoundationApi::class, DelicateCoroutinesApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun createMainUI() {
+fun createMainUi() {
     MaterialTheme {
 
-        val tabs by remember { mutableStateOf(listOf("ՎԱՃԱՌՔ 1", "ՎԱՃԱՌՔ 2", "ՄՈՒՏՔԵՐ", "ՊԱՀԵՍՏ")) }
+        val tabs by remember {
+            mutableStateOf(
+                listOf(
+                    Screen(ScreenType.SELL, "ՎԱՃԱՌՔ 1"),
+                    Screen(ScreenType.SELL, "ՎԱՃԱՌՔ 2"),
+                    Screen(ScreenType.PURCHASE, "ՄՈՒՏՔԵՐ"),
+                    Screen(ScreenType.STORAGE, "ՊԱՀԵՍՏ")
+                )
+            )
+        }
 
         var selectedTabIndex by remember { mutableStateOf(0) }
 
@@ -29,9 +42,9 @@ fun createMainUI() {
 
         Column {
             TabRow(selectedTabIndex) {
-                tabs.forEachIndexed { index, title ->
+                tabs.forEachIndexed { index, tab ->
                     Tab(
-                        text = { Text(title) },
+                        text = { Text(tab.title) },
                         selected = pagerState.currentPage == index,
                         onClick = {
                             selectedTabIndex = index
@@ -40,110 +53,51 @@ fun createMainUI() {
                 }
             }
 
-            Content(selectedTabIndex)
+            Content(tabs[selectedTabIndex])
         }
     }
 }
 
-class MyViewModel {
-    private val _tasks = getWellnessTasks().toMutableStateList()
-    val tasks: List<SellProductGroupModel>
-        get() = _tasks
-
-    fun changeTaskChecked(item: SellProductGroupModel, checked: Boolean) =
-        tasks.find { it.groupName == item.groupName }?.let { task ->
-            task.isExpanded = checked
-        }
-
-    private fun getWellnessTasks() = mutableListOf(
-        SellProductGroupModel("Sigaret", 20),
-        SellProductGroupModel("Katnamterq", 12),
-        SellProductGroupModel("Hacabulkexen Hacabulkexen", 5),
-        SellProductGroupModel("Alkohol", 156),
-        SellProductGroupModel("Katnamterq55", 999),
-        SellProductGroupModel("Pahaco", 44)
-    )
-}
 
 @Composable
-fun Content(selectedTabIndex: Int) {
-    val viewModel = remember { MyViewModel() }
+fun Content(tab: Screen) {
+
+    val vmList = remember { mutableListOf<BaseViewModel>() }
+
+    vmList.add(createViewModel(tab))
+
+//    val viewModelPurchase = remember { PurchaseViewModel() }
+//    val viewModelStorage = remember { StorageViewModel() }
+//    val viewModelSell = remember { SellViewModel() }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        when (selectedTabIndex) {
-            0 -> {
-                Column {
-                    Text("Content for Tab 1", modifier = Modifier.padding(16.dp))
-                    Button(onClick = {
-                        //tabs = tabs.toMutableList().also { it.add(tabs.size, "Tab ${tabs.size + 1}") }.toList()
-                    }) {
-                        Text("Content for Tab 1", modifier = Modifier.padding(16.dp))
-                    }
-                }
+        when (tab.type) {
+            ScreenType.SELL -> {
+                CreateSellUi(vmList.last())
             }
 
-            1 -> {
-                //addToList(SellProductGroupModel("Mirg", 77))
-                //addToList(SellProductGroupModel("Banjarexen", 88))
-                Column {
-                    Text("Content for Tab 2", modifier = Modifier.padding(16.dp))
-                    Button(onClick = {
-                        //tabs = tabs.toMutableList().also { it.remove(tabs[tabs.size -1]) }.toList()
-                    }) {
-                        Text("Content for Tab 2", modifier = Modifier.padding(16.dp))
-                    }
-                }
+            ScreenType.PURCHASE -> {
+                CreatePurchaseUi(vmList.last())
             }
 
-            2 -> {
-                println("Tab3")
-
-                CreateUI(viewModel)
-
-//                LaunchedEffect(selectedTabIndex) {
-//                    addToList(SellProductGroupModel("Sigaret", 20))
-//                    addToList(SellProductGroupModel("Katnamterq", 12))
-//                    addToList(SellProductGroupModel("Hacabulkexen Hacabulkexen", 5))
-//                    addToList(SellProductGroupModel("Alkohol", 156))
-//                    addToList(SellProductGroupModel("Katnamterq", 999))
-//                    addToList(SellProductGroupModel("Pahaco", 44))
-//                }
+            ScreenType.STORAGE -> {
+                CreateStorageUi(vmList.last())
             }
         }
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun MenuBarScope.FileMenu() = Menu("Settings", mnemonic = 'S') {
-//    Item(
-//        "Reset",
-//        mnemonic = 'R',
-//        shortcut = KeyShortcut(Key.R, ctrl = true),
-//        onClick = { println("Reset") }
-//    )
-//    CheckboxItem(
-//        "Advanced settings",
-//        mnemonic = 'A',
-//        checked = isAdvancedSettings,
-//        onCheckedChange = { isAdvancedSettings = !isAdvancedSettings }
-//    )
-//    if (isAdvancedSettings) {
-//        Menu("Theme") {
-//            RadioButtonItem(
-//                "Light",
-//                mnemonic = 'L',
-//                icon = ColorCircle(Color.LightGray),
-//                selected = theme == Theme.Light,
-//                onClick = { theme = Theme.Light }
-//            )
-//            RadioButtonItem(
-//                "Dark",
-//                mnemonic = 'D',
-//                icon = ColorCircle(Color.DarkGray),
-//                selected = theme == Theme.Dark,
-//                onClick = { theme = Theme.Dark }
-//            )
-//        }
-//    }
-}
+fun createViewModel(tab: Screen) = when (tab.type) {
+        ScreenType.SELL -> {
+            remember { SellViewModel() }
+        }
+
+        ScreenType.PURCHASE -> {
+            remember { PurchaseViewModel() }
+        }
+
+        ScreenType.STORAGE -> {
+            remember { StorageViewModel() }
+        }
+    }
