@@ -61,43 +61,46 @@ fun createMainUi() {
 
 @Composable
 fun Content(tab: Screen) {
-
     val vmList = remember { mutableListOf<BaseViewModel>() }
 
-    vmList.add(createViewModel(tab))
-
-//    val viewModelPurchase = remember { PurchaseViewModel() }
-//    val viewModelStorage = remember { StorageViewModel() }
-//    val viewModelSell = remember { SellViewModel() }
+    val newModel = check(tab, vmList) ?: vmList.apply {
+        add(createViewModel(tab))
+    }.last()
 
     Box(modifier = Modifier.fillMaxSize()) {
         when (tab.type) {
             ScreenType.SELL -> {
-                CreateSellUi(vmList.last())
+                CreateSellUi(newModel, tab)
             }
 
             ScreenType.PURCHASE -> {
-                CreatePurchaseUi(vmList.last())
+                CreatePurchaseUi(newModel, tab)
             }
 
             ScreenType.STORAGE -> {
-                CreateStorageUi(vmList.last())
+                CreateStorageUi(newModel, tab)
             }
         }
     }
 }
 
+fun check(tab: Screen, list: MutableList<BaseViewModel>) =
+    list.firstOrNull {
+        tab.uuid == it.uuid
+    }
+
+
 @Composable
 fun createViewModel(tab: Screen) = when (tab.type) {
-        ScreenType.SELL -> {
-            remember { SellViewModel() }
-        }
-
-        ScreenType.PURCHASE -> {
-            remember { PurchaseViewModel() }
-        }
-
-        ScreenType.STORAGE -> {
-            remember { StorageViewModel() }
-        }
+    ScreenType.SELL -> {
+        SellViewModel()
     }
+
+    ScreenType.PURCHASE -> {
+        PurchaseViewModel()
+    }
+
+    ScreenType.STORAGE -> {
+        StorageViewModel()
+    }
+}

@@ -1,19 +1,29 @@
 package sell.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import main.BaseViewModel
+import main.model.Screen
 import sell.model.ProductGroupListItem
 
 @Composable
-fun CreateSellUi(vm: BaseViewModel) {
+fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
+    (vm as SellViewModel).uuid = tab.uuid
 
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -26,8 +36,8 @@ fun CreateSellUi(vm: BaseViewModel) {
                         .fillMaxWidth(0.3f)
                         .background(Color(255, 0, 0))
                 ) {
-                    itemsIndexed((vm as SellViewModel).tasks) { _, item ->
-                       ProductGroupListItem(
+                    itemsIndexed(vm.tasks) { _, item ->
+                        ProductGroupListItem(
                             item,
                             checked = item.isExpanded,
                             onChecked = { task ->
