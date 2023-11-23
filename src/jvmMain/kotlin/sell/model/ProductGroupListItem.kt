@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -30,7 +31,7 @@ fun ProductGroupListItem(
 ) {
     //val vm = remember { SellViewModel() }
     Card(
-        modifier = Modifier
+        modifier = Modifier.background(MaterialTheme.colors.secondaryVariant)
             .fillMaxWidth()
             .padding(2.dp),
         onClick = {
@@ -43,7 +44,7 @@ fun ProductGroupListItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
                 .background(
-                    Color(156, 156, 156),
+                    androidx.compose.material3.MaterialTheme.colorScheme.outline,
                 )
         ) {
             Text(

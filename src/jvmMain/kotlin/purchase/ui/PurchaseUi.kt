@@ -8,7 +8,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import main.BaseViewModel
 import main.model.Screen
 
@@ -21,7 +20,7 @@ fun CreatePurchaseUi(vm: BaseViewModel, tab: Screen) {
     ) {
         Box(Modifier.fillMaxSize()) {
             Text(
-                modifier = Modifier.fillMaxSize().background(Color.Yellow).align(Alignment.Center),
+                modifier = Modifier.fillMaxSize().background(androidx.compose.material3.MaterialTheme.colorScheme.inverseOnSurface).align(Alignment.Center),
                 text = (vm as PurchaseViewModel).tasks[0]
             )
         }

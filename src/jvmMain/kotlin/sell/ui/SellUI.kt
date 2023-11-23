@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +41,7 @@ fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
                     modifier = Modifier
                         .fillMaxHeight()
                         .widthIn(max = vm.width)
-                        .background(Color(255, 0, 0))
+                        .background(MaterialTheme.colors.secondaryVariant)
                 ) {
                     itemsIndexed(vm.tasks) { _, item ->
                         ProductGroupListItem(
@@ -79,7 +80,7 @@ fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
                     Card(modifier = Modifier.padding(3.dp)) {
                         Box(
                             Modifier.fillMaxWidth().fillMaxHeight(0.7f)
-                                .background(Color(0, 255, 255))
+                                .background(androidx.compose.material3.MaterialTheme.colorScheme.secondaryContainer)
                         ) {
                             Text(text = "basket")
                         }
@@ -87,7 +88,7 @@ fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
                     Card(modifier = Modifier.padding(3.dp)) {
                         Box(
                             Modifier.fillMaxHeight().fillMaxWidth(1.0f)
-                                .background(Color(255, 255, 0))
+                                .background(MaterialTheme.colors.onPrimary)
                         ) {
                             Text(text = "tools")
                         }

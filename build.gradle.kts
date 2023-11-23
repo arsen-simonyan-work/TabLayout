@@ -26,6 +26,7 @@ kotlin {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
+                api(compose.material3)
 
                 implementation(compose.desktop.currentOs)
                 //implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha08")

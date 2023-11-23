@@ -1,6 +1,7 @@
 package main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,39 +23,36 @@ import storage.ui.StorageViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun createMainUi() {
-    MaterialTheme {
-
-        val tabs by remember {
-            mutableStateOf(
-                listOf(
-                    Screen(ScreenType.SELL, "ՎԱՃԱՌՔ 1"),
-                    Screen(ScreenType.SELL, "ՎԱՃԱՌՔ 2"),
-                    Screen(ScreenType.PURCHASE, "ՄՈՒՏՔԵՐ"),
-                    Screen(ScreenType.STORAGE, "ՊԱՀԵՍՏ")
-                )
+fun createMainUi(modifier: Modifier = Modifier.background(MaterialTheme.colors.secondary)) {
+    val tabs by remember {
+        mutableStateOf(
+            listOf(
+                Screen(ScreenType.SELL, "ՎԱՃԱՌՔ 1"),
+                Screen(ScreenType.SELL, "ՎԱՃԱՌՔ 2"),
+                Screen(ScreenType.PURCHASE, "ՄՈՒՏՔԵՐ"),
+                Screen(ScreenType.STORAGE, "ՊԱՀԵՍՏ")
             )
-        }
+        )
+    }
 
-        var selectedTabIndex by remember { mutableStateOf(0) }
+    var selectedTabIndex by remember { mutableStateOf(0) }
 
-        val pagerState = rememberPagerState(initialPage = tabs.size)
+    val pagerState = rememberPagerState(initialPage = tabs.size)
 
-        Column {
-            TabRow(selectedTabIndex) {
-                tabs.forEachIndexed { index, tab ->
-                    Tab(
-                        text = { Text(tab.title) },
-                        selected = pagerState.currentPage == index,
-                        onClick = {
-                            selectedTabIndex = index
-                        }
-                    )
-                }
+    Column {
+        TabRow(selectedTabIndex) {
+            tabs.forEachIndexed { index, tab ->
+                Tab(
+                    text = { Text(tab.title) },
+                    selected = pagerState.currentPage == index,
+                    onClick = {
+                        selectedTabIndex = index
+                    }
+                )
             }
-
-            Content(tabs[selectedTabIndex])
         }
+
+        Content(tabs[selectedTabIndex])
     }
 }
 
