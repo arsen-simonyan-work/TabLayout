@@ -20,14 +20,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerIcon
-import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.unit.dp
 import main.BaseViewModel
 import main.model.Screen
 import sell.model.ProductGroupListItem
+import java.awt.Cursor
 
 @Composable
 fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
@@ -69,7 +67,7 @@ fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
                         )
                     }
                 }.pointerHoverIcon(
-                    icon = PointerIcon.Crosshair
+                    icon = PointerIcon(Cursor(Cursor.W_RESIZE_CURSOR))
                 )
             )
             Box(Modifier.fillMaxHeight().fillMaxWidth(1.0f)) {
