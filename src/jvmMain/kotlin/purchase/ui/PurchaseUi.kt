@@ -10,15 +10,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import main.BaseViewModel
+import main.model.Screen
 
 @Composable
-fun CreatePurchaseUi(vm: BaseViewModel) {
+fun CreatePurchaseUi(vm: BaseViewModel, tab: Screen) {
+    (vm as PurchaseViewModel).uuid = tab.uuid
 
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
         Box(Modifier.fillMaxSize()) {
-            Text(modifier = Modifier.fillMaxSize().background(Color.Yellow).align(Alignment.Center), text = (vm as PurchaseViewModel).tasks[0])
+            Text(
+                modifier = Modifier.fillMaxSize().background(Color.Yellow).align(Alignment.Center),
+                text = (vm as PurchaseViewModel).tasks[0]
+            )
         }
     }
 }

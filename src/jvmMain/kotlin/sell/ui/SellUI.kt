@@ -10,6 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Card
@@ -26,10 +33,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.unit.dp
 import main.BaseViewModel
+import main.model.Screen
 import sell.model.ProductGroupListItem
 
 @Composable
-fun CreateSellUi(vm: BaseViewModel) {
+fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
+    (vm as SellViewModel).uuid = tab.uuid
     var width by remember { mutableStateOf(250.dp) }
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -49,7 +58,7 @@ fun CreateSellUi(vm: BaseViewModel) {
                             }
                         }
                 ) {
-                    itemsIndexed((vm as SellViewModel).tasks) { _, item ->
+                    itemsIndexed(vm.tasks) { _, item ->
                         ProductGroupListItem(
                             item,
                             checked = item.isExpanded,

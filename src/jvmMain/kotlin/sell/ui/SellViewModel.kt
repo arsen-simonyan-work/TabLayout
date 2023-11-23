@@ -4,7 +4,7 @@ import androidx.compose.runtime.toMutableStateList
 import main.BaseViewModel
 import sell.model.SellProductGroupModel
 
-class SellViewModel: BaseViewModel() {
+class SellViewModel : BaseViewModel() {
     private val _tasks = getProductGroupsList().toMutableStateList()
     val tasks: List<SellProductGroupModel>
         get() = _tasks
