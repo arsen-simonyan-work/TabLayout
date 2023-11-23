@@ -40,6 +40,7 @@ import sell.model.ProductGroupListItem
 fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
     (vm as SellViewModel).uuid = tab.uuid
     var width by remember { mutableStateOf(250.dp) }
+
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
