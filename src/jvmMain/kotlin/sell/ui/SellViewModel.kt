@@ -2,7 +2,6 @@ package sell.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.unit.dp
@@ -14,7 +13,7 @@ class SellViewModel : BaseViewModel() {
     val tasks: List<SellProductGroupModel>
         get() = _tasks
 
-    var width by  mutableStateOf(250.dp)
+    var width by mutableStateOf(250f)
 
     private fun getProductGroupsList() = mutableListOf(
         SellProductGroupModel("Sigaret", 20),
