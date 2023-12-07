@@ -1,5 +1,6 @@
 package main
 
+import MainViewModel
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,9 @@ import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import main.config.model.AppConfig
+import main.io.convertToDataClass
+import main.io.readFile
 import main.model.Screen
 import main.model.ScreenType
 import purchase.ui.CreatePurchaseUi
@@ -23,6 +27,11 @@ import storage.ui.StorageViewModel
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun createMainUi() {
+
+    val vm = remember { MainViewModel() }
+
+    vm.tasks = readAppConfig()
+
     MaterialTheme {
 
         val tabs by remember {
@@ -104,3 +113,6 @@ fun createViewModel(tab: Screen) = when (tab.type) {
         StorageViewModel()
     }
 }
+
+fun readAppConfig() =
+    convertToDataClass<AppConfig>(readFile("config.txt"))
