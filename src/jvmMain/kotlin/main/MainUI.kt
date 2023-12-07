@@ -1,6 +1,8 @@
 package main
 
+import MainViewModel
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +14,9 @@ import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import main.config.model.AppConfig
+import main.io.convertToDataClass
+import main.io.readFile
 import main.model.Screen
 import main.model.ScreenType
 import purchase.ui.CreatePurchaseUi
@@ -24,16 +29,20 @@ import storage.ui.StorageViewModel
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun createMainUi(modifier: Modifier = Modifier.background(MaterialTheme.colors.secondary)) {
+    val vm = remember { MainViewModel() }
+
+    vm.tasks = readAppConfig()
+
     val tabs by remember {
-        mutableStateOf(
-            listOf(
-                Screen(ScreenType.SELL, "ՎԱՃԱՌՔ 1"),
-                Screen(ScreenType.SELL, "ՎԱՃԱՌՔ 2"),
-                Screen(ScreenType.PURCHASE, "ՄՈՒՏՔԵՐ"),
-                Screen(ScreenType.STORAGE, "ՊԱՀԵՍՏ")
+            mutableStateOf(
+                listOf(
+                    Screen(ScreenType.SELL, "ՎԱՃԱՌՔ 1"),
+                    Screen(ScreenType.SELL, "ՎԱՃԱՌՔ 2"),
+                    Screen(ScreenType.PURCHASE, "ՄՈՒՏՔԵՐ"),
+                    Screen(ScreenType.STORAGE, "ՊԱՀԵՍՏ")
+                )
             )
-        )
-    }
+        }
 
     var selectedTabIndex by remember { mutableStateOf(0) }
 
@@ -66,16 +75,29 @@ fun Content(tab: Screen) {
     }.last()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        when (tab.type) {
-            ScreenType.SELL -> {
+//        when (tab.type) {
+//            ScreenType.SELL -> {
+//                CreateSellUi(newModel, tab)
+//            }
+//
+//            ScreenType.PURCHASE -> {
+//                CreatePurchaseUi(newModel, tab)
+//            }
+//
+//            ScreenType.STORAGE -> {
+//                CreateStorageUi(newModel, tab)
+//            }
+//        }
+        when (newModel) {
+            is SellViewModel -> {
                 CreateSellUi(newModel, tab)
             }
 
-            ScreenType.PURCHASE -> {
+            is PurchaseViewModel -> {
                 CreatePurchaseUi(newModel, tab)
             }
 
-            ScreenType.STORAGE -> {
+            is StorageViewModel -> {
                 CreateStorageUi(newModel, tab)
             }
         }
@@ -102,3 +124,6 @@ fun createViewModel(tab: Screen) = when (tab.type) {
         StorageViewModel()
     }
 }
+
+fun readAppConfig() =
+    convertToDataClass<AppConfig>(readFile("config.txt"))

@@ -2,6 +2,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization") version "1.8.20"
     id("org.jetbrains.kotlin.jvm") version "1.8.20" apply false
     id("org.jetbrains.compose") version "1.5.0-dev1036"
 }
@@ -34,6 +35,7 @@ kotlin {
                 //implementation("androidx.compose.foundation:foundation-layout:1.1.0")
                 implementation("androidx.navigation:navigation-compose:2.5.3")
                 implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1")
             }
         }
         val jvmTest by getting

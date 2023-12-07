@@ -1,7 +1,9 @@
 package sell.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,21 +18,28 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.dp
-import main.BaseViewModel
 import main.model.Screen
 import sell.model.ProductGroupListItem
 import java.awt.Cursor
 
 @Composable
-fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
-    (vm as SellViewModel).uuid = tab.uuid
+fun CreateSellUi(vm: SellViewModel, tab: Screen) {
+    vm.uuid = tab.uuid
+
+    val maxWidth by remember { mutableStateOf(750.dp) }
+    val minWidth by remember { mutableStateOf(250.dp) }
 
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -40,7 +49,15 @@ fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .widthIn(max = vm.width)
+                        .widthIn(
+                            min = 250.dp,
+                            max = when {
+                                vm.width in minWidth..maxWidth -> vm.width
+                                vm.width > maxWidth -> maxWidth
+                                vm.width < minWidth -> minWidth
+                                else -> 0.dp
+                            }
+                        )
                         .background(MaterialTheme.colors.secondaryVariant)
                 ) {
                     itemsIndexed(vm.tasks) { _, item ->
@@ -59,18 +76,17 @@ fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
                     }
                 }
             }
+
             Spacer(
-                Modifier.fillMaxHeight().width(2.dp).pointerInput(Unit) {
-                    detectDragGestures { change, _ ->
-                        vm.width = (vm.width + change.positionChange().x.toDp()).coerceIn(
-                            250.dp,
-                            700.dp
-                        )
-                    }
-                }.pointerHoverIcon(
+                Modifier.fillMaxHeight().width(2.dp).draggable(
+                    state = rememberDraggableState { delta ->
+                        vm.width += delta.dp
+                    }, orientation = Orientation.Horizontal
+                ).pointerHoverIcon(
                     icon = PointerIcon(Cursor(Cursor.W_RESIZE_CURSOR))
                 )
             )
+
             Box(Modifier.fillMaxHeight().fillMaxWidth(1.0f)) {
 //                AsyncImage(
 //                    model = "https://avatars.githubusercontent.com/u/52348172?s=400&u=b966d448e17f4fc8b2ef3fcbc18b395abe21e1c8&v=4",
