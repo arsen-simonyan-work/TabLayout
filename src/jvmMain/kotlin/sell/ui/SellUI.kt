@@ -28,14 +28,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.dp
-import main.BaseViewModel
 import main.model.Screen
 import sell.model.ProductGroupListItem
 import java.awt.Cursor
 
 @Composable
-fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
-    (vm as SellViewModel).uuid = tab.uuid
+fun CreateSellUi(vm: SellViewModel, tab: Screen) {
+    vm.uuid = tab.uuid
 
     val maxWidth by remember { mutableStateOf(750.dp) }
     val minWidth by remember { mutableStateOf(250.dp) }
@@ -51,9 +50,9 @@ fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
                         .widthIn(
                             min = 250.dp,
                             max = when {
-                                vm.width.dp in minWidth..maxWidth -> vm.width.dp
-                                vm.width.dp > maxWidth -> maxWidth
-                                vm.width.dp < minWidth -> minWidth
+                                vm.width in minWidth..maxWidth -> vm.width
+                                vm.width > maxWidth -> maxWidth
+                                vm.width < minWidth -> minWidth
                                 else -> 0.dp
                             }
                         )
@@ -79,7 +78,7 @@ fun CreateSellUi(vm: BaseViewModel, tab: Screen) {
             Spacer(
                 Modifier.fillMaxHeight().width(2.dp).draggable(
                     state = rememberDraggableState { delta ->
-                        vm.width += delta
+                        vm.width += delta.dp
                     }, orientation = Orientation.Horizontal
                 ).pointerHoverIcon(
                     icon = PointerIcon(Cursor(Cursor.W_RESIZE_CURSOR))

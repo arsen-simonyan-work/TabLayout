@@ -77,16 +77,29 @@ fun Content(tab: Screen) {
     }.last()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        when (tab.type) {
-            ScreenType.SELL -> {
+//        when (tab.type) {
+//            ScreenType.SELL -> {
+//                CreateSellUi(newModel, tab)
+//            }
+//
+//            ScreenType.PURCHASE -> {
+//                CreatePurchaseUi(newModel, tab)
+//            }
+//
+//            ScreenType.STORAGE -> {
+//                CreateStorageUi(newModel, tab)
+//            }
+//        }
+        when (newModel) {
+            is SellViewModel -> {
                 CreateSellUi(newModel, tab)
             }
 
-            ScreenType.PURCHASE -> {
+            is PurchaseViewModel -> {
                 CreatePurchaseUi(newModel, tab)
             }
 
-            ScreenType.STORAGE -> {
+            is StorageViewModel -> {
                 CreateStorageUi(newModel, tab)
             }
         }
